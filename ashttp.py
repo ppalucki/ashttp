@@ -66,7 +66,9 @@ class BackgroundProgramInAPTY():
     def __call__(self):
         while True:
             try:
-                self.ansi.write(os.read(self.master_fd, 1024))
+                data = os.read(self.master_fd, 1024)
+                self.ansi.write(data)
+                sys.stdout.write(data)
             except (IOError, OSError):
                 pass  # Don't whine if the program left ...
 
@@ -87,7 +89,11 @@ def ashttp(args):
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        httpd.shutdown()
+        print 'got signal - exiting...'
+        sys.exit()
+        #httpd.shutdown()
+        
+        
 
 
 def main(argc, argv):
